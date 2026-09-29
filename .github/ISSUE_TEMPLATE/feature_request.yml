@@ -1,0 +1,41 @@
+name: Feature request
+description: Propose a new capability, curriculum tier or scenario.
+labels: [enhancement, needs-triage]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+      description: What can a player or a developer not do today?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+    validations:
+      required: true
+
+  - type: dropdown
+    id: tier
+    attributes:
+      label: Curriculum tier
+      description: Which part of the roadmap does this belong to?
+      options:
+        - Search
+        - Constraint satisfaction
+        - Optimisation
+        - Markov decision processes
+        - Reinforcement learning
+        - Probabilistic reasoning
+        - Machine learning
+        - Adversarial search and game theory
+        - Not tied to a tier
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered

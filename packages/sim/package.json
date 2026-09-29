@@ -1,0 +1,17 @@
+{
+  "name": "@rationauts/sim",
+  "version": "0.1.0",
+  "description": "Scenario harness, replay and benchmark CLI for Rationauts.",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "bin": {
+    "rationauts": "./src/cli.ts"
+  },
+  "dependencies": {
+    "@rationauts/agents": "workspace:*",
+    "@rationauts/core": "workspace:*"
+  }
+}

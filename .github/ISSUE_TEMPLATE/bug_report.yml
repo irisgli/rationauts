@@ -1,0 +1,45 @@
+name: Bug report
+description: Something behaves differently from how it is documented.
+labels: [bug, needs-triage]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Simulation bugs are usually reproducible exactly. If you can, include the
+        scenario name and seed — that is enough to replay the failure verbatim.
+
+  - type: input
+    id: scenario
+    attributes:
+      label: Scenario and seed
+      placeholder: 'mudflats, seed 1729'
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected to happen
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: What actually happened
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: A failing command or test is worth more than prose.
+      render: shell
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Commit or version
+    validations:
+      required: true
