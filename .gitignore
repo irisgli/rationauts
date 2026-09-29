@@ -15,3 +15,6 @@ pnpm-debug.log*
 .env
 .env.*
 !.env.example
+
+# Local editor and agent tooling configuration
+.claude/
