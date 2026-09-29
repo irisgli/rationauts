@@ -1,69 +1,83 @@
-# Rationauts
+<h1 align="center">Rationauts</h1>
 
-A colony-building game whose tech tree is the classical AI curriculum.
+<p align="center">
+  A colony-building game whose tech tree is the classical AI curriculum.
+</p>
 
-Your bots start as reflex agents: they step toward whatever they want and get stuck on
-the first wall. You make them smarter by installing techniques — breadth-first search,
-then uniform-cost, then A\* with an admissible heuristic — and the world is built so
-that each one _visibly fails_ before the next is unlocked. The game is the argument for
+<p align="center">
+  <a href="https://github.com/irisgli/rationauts/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/irisgli/rationauts/actions/workflows/ci.yml/badge.svg"></a>
+  <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-MIT-blue"></a>
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-strict-3178C6">
+  <img alt="Node" src="https://img.shields.io/badge/node-%E2%89%A522-5FA04E">
+  <img alt="Tests" src="https://img.shields.io/badge/tests-120-success">
+</p>
+
+<h3 align="center">
+  <a href="https://irisgli.github.io/rationauts/">Play</a>
+  <span> · </span>
+  <a href="docs/design/0001-rationauts.md">Design</a>
+  <span> · </span>
+  <a href="docs/adr">Decisions</a>
+  <span> · </span>
+  <a href="docs/ROADMAP.md">Roadmap</a>
+  <span> · </span>
+  <a href="CONTRIBUTING.md">Contributing</a>
+</h3>
+
+---
+
+Your bots start as reflex agents: they step toward what they want and get stuck on the
+first wall. You make them smarter by installing techniques — breadth-first search, then
+uniform-cost, then A\* with an admissible heuristic — and every map is built so the
+previous one _visibly fails_ before the next is unlocked. The game is the argument for
 why the algorithm exists.
 
-The premise is borrowed from [Autonauts](https://autonauts.fandom.com/), where you
-teach robots by recording a literal loop of your own actions. Rationauts swaps that one
-axis: you do not record a loop, you install a way of thinking.
+The premise comes from [Autonauts](https://autonauts.fandom.com/), where you teach
+robots by recording a literal loop of your own actions. Rationauts swaps that one axis:
+you don't record a loop, you install a way of thinking.
 
-**[Play it](https://irisgli.github.io/rationauts/)** — pick a sheet, install a module, press Run.
+<table>
+<tr>
+<th align="center" width="50%">Uniform-cost search · <code>513</code> tiles examined</th>
+<th align="center" width="50%">A* · <code>182</code> tiles examined</th>
+</tr>
+<tr>
+<td><img alt="Uniform-cost search floods almost the entire map" src="docs/assets/great-plain-uniform-cost.svg"></td>
+<td><img alt="A* examines a narrow band hugging the route" src="docs/assets/great-plain-astar.svg"></td>
+</tr>
+</table>
 
-> **Status:** early. The Search tier is complete and playable. Later tiers are
-> tracked in [docs/ROADMAP.md](docs/ROADMAP.md).
+Both return the same route at the same cost. The only difference between them is how
+much of the map each had to look at — and that is the whole lesson. Teal is every tile
+the planner expanded, shaded by when it got there. These images are
+[generated from the library itself](packages/app/scripts/render-plate.ts), not
+screenshotted.
 
-## Why this repository might interest you
-
-It is a game, but the engineering is the point:
-
-- **The simulation is a pure function.** `step(state, intents) -> { state, events }`
-  consults no clock and no ambient randomness. Same seed, same intents, byte-identical
-  result — enforced by lint rules, not by discipline. See
-  [ADR 3](docs/adr/0003-determinism-as-an-enforced-invariant.md).
-- **The algorithms do not know they are in a game.** `@rationauts/agents` depends on
-  nothing at all. `aStar` takes a `SearchProblem<S, A>`, so it is validated against the
-  8-puzzle and against uniform-cost ground truth, not just against this project's own
-  levels. See [ADR 4](docs/adr/0004-algorithms-are-game-agnostic.md).
-- **The test suite and the game levels are the same artefact.** Every scenario is a
-  headless, seeded benchmark that records ticks, path cost and nodes expanded, and also
-  a level you can play.
-- **The client draws what the planner looked at.** On `great-plain`, A\* and
-  uniform-cost search return the same route at the same cost; A\* examines 573 tiles
-  and uniform-cost examines 1,664. The overlay is that difference, shaded by expansion
-  order, and it is the one thing a table cannot show you.
-
-## Quick start
+## Getting started
 
 ```bash
 pnpm install
-pnpm dev          # browser client at http://localhost:5173
+pnpm dev
 ```
 
 ```bash
-pnpm verify       # format, lint, typecheck, test — the same gate CI runs
-pnpm sim bench    # headless benchmark across every scenario
+pnpm verify      # format, lint, typecheck, test — exactly what CI runs
+pnpm sim bench   # every planner against every scenario, headless
 ```
 
-Requires Node 22 or newer and pnpm 10 or newer.
+Requires Node 22+ and pnpm 10+.
 
-## Layout
+## Packages
 
-```
-packages/
-  core/     deterministic simulation engine — no AI, no DOM, no dependencies
-  agents/   game-agnostic AI algorithms — depends on nothing, deliberately
-  sim/      scenarios, runners, metrics, replay; binds agents to the engine
-  app/      browser client and algorithm debug overlays
-```
+| Package                                 | Description                                                                                                 |
+| --------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| [`@rationauts/core`](packages/core)     | Deterministic simulation engine. No AI, no DOM, no dependencies.                                            |
+| [`@rationauts/agents`](packages/agents) | Classical AI algorithms. Depends on nothing, [deliberately](docs/adr/0004-algorithms-are-game-agnostic.md). |
+| [`@rationauts/sim`](packages/sim)       | Scenarios, runners, metrics, replay, benchmark CLI.                                                         |
+| [`@rationauts/app`](packages/app)       | Browser client and search overlays.                                                                         |
 
-Dependencies run strictly one way — `app → sim → agents → core` — and ESLint fails the
-build if that is violated. `tsconfig.headless.json` typechecks the first three packages
-against a DOM-free `lib`, so the engine cannot quietly acquire a browser dependency.
+Dependencies run one way — `app → sim → agents → core` — and ESLint fails the build if
+that is violated.
 
 ## The curriculum
 
@@ -72,24 +86,50 @@ Each tier is motivated by a failure of the one before it.
 | Tier                      | What breaks without it                                               | Techniques                                         |
 | ------------------------- | -------------------------------------------------------------------- | -------------------------------------------------- |
 | **Search** ✅             | A reflex bot walks into walls; a step-counting bot wades through mud | BFS, DFS, uniform-cost, A\*, admissible heuristics |
-| Constraint satisfaction   | Bots deadlock over a single shared workshop                          | Backtracking, forward checking, AC-3, heuristics   |
-| Optimisation              | Scarce inputs must be split across competing recipes                 | Linear and integer programming                     |
+| Constraint satisfaction   | Bots deadlock over one shared workshop                               | Backtracking, forward checking, AC-3               |
+| Optimisation              | Scarce inputs split across competing recipes                         | Linear and integer programming                     |
 | Markov decision processes | Ice makes moves fail; the best plan is no longer a path              | Value iteration, policy iteration                  |
 | Reinforcement learning    | Terrain costs are unknown until something walks on them              | Q-learning, approximate Q-learning                 |
 | Probabilistic reasoning   | Fog of war and a noisy compass                                       | Bayes nets, HMMs, particle filters                 |
-| Machine learning          | Ore must be sorted from noisy assay readings                         | Naive Bayes, perceptron, decision trees            |
-| Adversarial search        | A rival colony competes for the same groves                          | Minimax, expectimax, game theory                   |
+| Machine learning          | Ore sorted from noisy assay readings                                 | Naive Bayes, perceptron, decision trees            |
+| Adversarial search        | A rival colony wants the same groves                                 | Minimax, expectimax, game theory                   |
 
-## Credits and licensing
+Full plan in [ROADMAP.md](docs/ROADMAP.md).
+
+## How it's built
+
+Three properties are enforced by tooling rather than by discipline.
+
+**Determinism.** `step(state, intents)` is a pure function. Same seed, same intents,
+byte-identical result. `Math.random`, `Date` and `performance` are banned outright in
+`core` and `agents`. → [ADR 3](docs/adr/0003-determinism-as-an-enforced-invariant.md)
+
+**Algorithms don't know they're in a game.** `aStar` takes a `SearchProblem<S, A>`, so
+it is validated against the eight-puzzle and against uniform-cost ground truth — not
+just against this project's own levels. → [ADR 4](docs/adr/0004-algorithms-are-game-agnostic.md)
+
+**Scenarios are the test suite.** Every level is a seeded, headless benchmark recording
+ticks, path cost and nodes expanded. Each one declares which planners _cannot_ finish
+it, and a test asserts exactly those fail — so a change that quietly makes the reflex
+agent good enough breaks the build instead of hollowing out the lesson.
+
+## Contributing
+
+One AI technique per pull request. A tier isn't done until it has an implementation, a
+test suite with an independent oracle, and a scenario the previous tier demonstrably
+fails. See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Credits
 
 The curriculum follows two public courses — Carnegie Mellon
 [15-281](https://www.cs.cmu.edu/~15281-f23/) and UC Berkeley
-[CS 188](https://inst.eecs.berkeley.edu/~cs188/fa26/) — as the source of the topic
-sequence and of the idea that each technique should be introduced by the failure of the
-previous one.
+[CS 188](https://inst.eecs.berkeley.edu/~cs188/fa26/) — for the topic sequence and for
+the idea that each technique should be introduced by the failure of the previous one.
 
 **No code, assets, layouts or assignment material from either course is used here.**
-Every fixture is original or procedurally generated. The reasoning is written up in
-[ADR 5](docs/adr/0005-no-course-materials-are-vendored.md).
+Every fixture is original or procedurally generated.
+→ [ADR 5](docs/adr/0005-no-course-materials-are-vendored.md)
 
-Licensed under the [MIT License](LICENSE).
+## License
+
+[MIT](LICENSE)

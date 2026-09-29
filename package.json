@@ -22,7 +22,8 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "sim": "tsx packages/sim/src/cli.ts",
-    "verify": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test"
+    "verify": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test",
+    "docs:plates": "pnpm --filter @rationauts/app exec tsx scripts/render-plate.ts"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
