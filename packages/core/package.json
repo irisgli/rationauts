@@ -1,0 +1,19 @@
+{
+  "name": "@rationauts/core",
+  "version": "0.1.0",
+  "description": "Deterministic, headless simulation engine for Rationauts.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "publishConfig": {
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js"
+      }
+    }
+  }
+}
