@@ -13,7 +13,7 @@
     "dev": "pnpm --filter @rationauts/app dev",
     "build": "pnpm --filter @rationauts/app build",
     "preview": "pnpm --filter @rationauts/app preview",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.headless.json",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
