@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { PLANNERS, PLANNER_IDS, type PlannerId } from './navigators.js';
-import { replay, runScenario } from './runner.js';
+import { createRun, replay, runScenario } from './runner.js';
 import { buildWorld, SCENARIOS, scenarioById } from './scenarios.js';
 
 const OPTIMAL_PLANNERS = PLANNER_IDS.filter(
@@ -180,5 +180,46 @@ describe('runner options', () => {
       },
     });
     expect(ticks).toBe(report.metrics.ticks);
+  });
+});
+
+describe('createRun', () => {
+  it('advances one tick at a time and agrees with a full run', () => {
+    // The client drives ticks by hand; the benchmark drives them in a loop. Both go
+    // through this object, so they cannot drift apart.
+    for (const scenario of SCENARIOS) {
+      const run = createRun(scenario, 'astar');
+      let snapshot = run.snapshot();
+      expect(snapshot.metrics.ticks).toBe(0);
+      while (!snapshot.finished) snapshot = run.tick();
+
+      const complete = runScenario(scenario, 'astar');
+      expect(snapshot.metrics, scenario.id).toEqual(complete.metrics);
+      expect(snapshot.succeeded).toBe(complete.succeeded);
+      expect(run.intents).toEqual(complete.intents);
+    }
+  });
+
+  it('ignores further ticks once finished', () => {
+    const scenario = scenarioById('open-field');
+    expect(scenario).toBeDefined();
+    if (scenario === undefined) return;
+    const run = createRun(scenario, 'astar');
+    let snapshot = run.snapshot();
+    while (!snapshot.finished) snapshot = run.tick();
+    const settled = snapshot.metrics;
+    run.tick();
+    run.tick();
+    expect(run.snapshot().metrics).toEqual(settled);
+  });
+
+  it('exposes the current plan per bot for the overlay', () => {
+    const scenario = scenarioById('great-plain');
+    expect(scenario).toBeDefined();
+    if (scenario === undefined) return;
+    const run = createRun(scenario, 'astar');
+    const snapshot = run.tick();
+    const plan = [...snapshot.plans.values()][0];
+    expect(plan?.explored.length).toBeGreaterThan(0);
   });
 });
