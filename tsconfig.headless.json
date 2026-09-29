@@ -1,0 +1,11 @@
+{
+  "//": "Typechecks the headless packages against a DOM-free lib set. This is how the",
+  "//2": "'core, agents and sim never touch the browser' invariant is enforced by the compiler",
+  "//3": "rather than by convention. See docs/adr/0003-determinism-as-an-invariant.md.",
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2023"],
+    "types": ["node"]
+  },
+  "include": ["packages/core/src/**/*", "packages/agents/src/**/*", "packages/sim/src/**/*"]
+}
