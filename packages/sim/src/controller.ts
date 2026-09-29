@@ -20,9 +20,9 @@ import { EMPTY_STATS, type PlanTelemetry } from './telemetry.js';
  * What a bot is trying to achieve. Scenarios choose one.
  *
  * `deliver` is ordinary logistics: fetch from a grove, carry to a depot, repeat.
- * `survey` is the multi-goal case — visit every grove once, then return to base — and
- * exists to show that the same A\* solves a problem whose state is not a position at
- * all.
+ * `survey` is the multi-goal case, visiting every grove once and then returning to
+ * base, and exists to show that the same A\* solves a problem whose state is not a
+ * position at all.
  */
 export type Objective = { readonly kind: 'deliver' } | { readonly kind: 'survey' };
 
@@ -58,7 +58,7 @@ function harvestableGroves(state: WorldState): readonly Position[] {
 /**
  * Every grove on the map, harvested or not.
  *
- * Surveying is about *visiting*, not taking — a surveyed grove is not consumed, so
+ * Surveying is about *visiting*, not taking. A surveyed grove is not consumed, so
  * `remaining` is the wrong thing to ask about.
  */
 export function surveySites(state: WorldState): readonly Position[] {
@@ -203,9 +203,9 @@ export function createReflexController(objective: Objective): Controller {
  *
  * The route is held as **remaining waypoints**, and a waypoint is only dropped once
  * the bot is observed standing on it. That is what makes the controller
- * self-correcting: the engine may refuse a move — the bot is still on cooldown after
- * harvesting, or another bot took the tile — and because nothing was consumed
- * optimistically, the same move is simply re-issued next tick.
+ * self-correcting: the engine may refuse a move, because the bot is still on cooldown
+ * after harvesting or another bot took the tile, and since nothing was consumed
+ * optimistically the same move is simply re-issued next tick.
  *
  * An earlier version consumed a direction per tick regardless of whether the move
  * landed. It desynchronised from reality on the first refused move, and the resulting
@@ -214,8 +214,8 @@ export function createReflexController(objective: Objective): Controller {
  *
  * Re-planning happens when the target changes, when the route is exhausted, or when
  * the bot is no longer adjacent to its next waypoint. Re-planning every tick would be
- * simpler and would make the expansion counts meaningless — the interesting number is
- * what it cost to produce a route, not how often one was recomputed.
+ * simpler and would make the expansion counts meaningless, because the interesting
+ * number is what it cost to produce a route, not how often one was recomputed.
  */
 export function createPlanningController(
   plannerId: Exclude<PlannerId, 'reflex'>,
@@ -321,9 +321,9 @@ function planRoute(
 /**
  * Plans a whole survey tour, then hands back only the leg to the next site.
  *
- * The tour is genuinely multi-goal — the state is `(position, visited-set)` — but the
- * bot still moves one tile at a time, so the route is cut at the first unvisited site
- * it reaches and re-solved from there. Re-solving is wasteful on purpose: it keeps
+ * The tour is genuinely multi-goal, with the state being `(position, visited-set)`,
+ * but the bot still moves one tile at a time, so the route is cut at the first
+ * unvisited site it reaches and re-solved from there. Re-solving is wasteful on purpose: it keeps
  * each plan's reported cost honest about the work that produced it.
  */
 function planSurvey(

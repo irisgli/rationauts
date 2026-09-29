@@ -1,5 +1,5 @@
 /**
- * `@rationauts/core` — the deterministic simulation engine.
+ * `@rationauts/core`: the deterministic simulation engine.
  *
  * This package knows nothing about artificial intelligence, rendering or scenarios.
  * It exposes a world state, a set of intents an agent may request, and a single

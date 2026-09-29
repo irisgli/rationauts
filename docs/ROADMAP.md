@@ -2,7 +2,7 @@
 
 Rationauts ships one curriculum tier at a time. A tier is complete when it has an
 implementation, a test suite with an independent oracle, and at least one scenario that
-the _previous_ tier measurably fails — that failure is the pedagogy, and it is also the
+the _previous_ tier measurably fails. That failure is the pedagogy, and it is also the
 regression test that stops a later refactor from quietly making the earlier tier good
 enough.
 
@@ -29,21 +29,21 @@ that require specific stations. Greedy allocation deadlocks.
 - `CSP<Variable, Value>` interface with constraint propagation
 - Backtracking search; forward checking; AC-3
 - Minimum-remaining-values and least-constraining-value heuristics
-- Scenario: `foundry` — shift scheduling across contended stations
+- Scenario `foundry`: shift scheduling across contended stations
 
 ### Optimisation
 
 Scarce inputs must be divided between competing recipes to maximise output.
 
 - Simplex for linear programs; branch-and-bound for integer programs
-- Scenario: `rationing` — allocate a fixed harvest across recipes
+- Scenario `rationing`: allocate a fixed harvest across recipes
 
 ### Markov decision processes
 
 Ice tiles make moves fail with known probability. A plan is no longer a path.
 
 - `MDP<S, A>` interface; value iteration and policy iteration
-- Scenario: `glacier` — stochastic movement with a cliff worth avoiding
+- Scenario `glacier`: stochastic movement with a cliff worth avoiding
 
 ### Reinforcement learning
 
@@ -51,7 +51,7 @@ Terrain costs become unknown until a bot has walked on them.
 
 - Q-learning and approximate Q-learning with feature extractors
 - Epsilon-greedy exploration with a seeded schedule
-- Scenario: `terra-incognita` — learn the cost map by exploring it
+- Scenario `terra-incognita`: learn the cost map by exploring it
 
 ### Probabilistic reasoning
 
@@ -59,14 +59,14 @@ Fog of war, plus a compass that lies a known fraction of the time.
 
 - Bayes net representation, exact inference by variable elimination, likelihood sampling
 - Hidden Markov models; forward algorithm; particle filtering
-- Scenario: `fogbank` — localise a lost bot from noisy readings
+- Scenario `fogbank`: localise a lost bot from noisy readings
 
 ### Machine learning
 
 Ore arrives with noisy assay readings and must be sorted before smelting.
 
 - Naive Bayes, perceptron, decision trees
-- Scenario: `assay` — classify ore quality under label noise
+- Scenario `assay`: classify ore quality under label noise
 
 ### Adversarial search and game theory
 
@@ -74,7 +74,7 @@ A rival colony competes for the same groves.
 
 - Minimax, alpha-beta pruning, expectimax
 - Evaluation functions; equilibrium analysis of contested resources
-- Scenario: `rivals` — two colonies, one forest
+- Scenario `rivals`: two colonies, one forest
 
 ## Infrastructure
 

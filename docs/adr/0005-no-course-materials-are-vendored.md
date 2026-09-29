@@ -7,7 +7,7 @@
 
 Rationauts takes its curriculum from two public university courses: Carnegie Mellon's
 15-281 and UC Berkeley's CS 188. Berkeley's Pacman projects in particular ship a large
-amount of reusable material — maze layouts, an autograder, agent scaffolding — and it
+amount of reusable material (maze layouts, an autograder, agent scaffolding), and it
 would be quick to import the maze files as test fixtures.
 
 Two problems. First, licensing: the Berkeley Pacman projects are distributed for
@@ -22,14 +22,14 @@ reading even when the code is original.
 No code, assets, layouts, test cases or autograder material from either course is
 copied into this repository, in any form, including transcribed or lightly renamed.
 
-The courses are credited in the README as the source of the _curriculum_ — the topic
+The courses are credited in the README as the source of the _curriculum_: the topic
 sequence and the pedagogical idea that each technique should be motivated by the
 failure of the previous one. Ideas and topic ordering are not copyrightable; their
 expression is.
 
 Test fixtures are original: hand-authored ASCII maps written for this project, plus
 mazes generated procedurally from a seed. Correctness is established against oracles
-that are computed rather than copied — uniform-cost search as ground truth for A*, and
+that are computed rather than copied: uniform-cost search as ground truth for A*, and
 exhaustive enumeration on small instances.
 
 ## Consequences

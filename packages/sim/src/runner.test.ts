@@ -53,7 +53,7 @@ describe('the difficulty ladder', () => {
     if (scenario === undefined) return;
     const reflex = runScenario(scenario, 'reflex');
     expect(reflex.succeeded).toBe(true);
-    // A reflex agent does no search at all — that is the whole point of the tier.
+    // A reflex agent does no search at all, which is the whole point of the tier.
     expect(reflex.metrics.expanded).toBe(0);
   });
 

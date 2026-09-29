@@ -6,7 +6,7 @@
  * drawn from the same library the game runs on, so a plate showing A* examining 573
  * tiles cannot drift from what A* actually does. Regenerate with `pnpm docs:plates`.
  *
- * It also exercises the claim the architecture rests on — that everything below the
+ * It also exercises the claim the architecture rests on, that everything below the
  * client is headless. This script imports `@rationauts/sim` in plain Node, with no
  * DOM anywhere.
  */
@@ -25,9 +25,9 @@ const CONTOUR_BANDS = 7;
  *
  * Taking the first plan would be simpler and useless: the opening leg is usually a
  * two-tile hop to the nearest grove, which illustrates nothing. The largest plan of
- * the run is the one that actually shows the planner working — typically the long
- * haul from a grove to the depot — and "largest" is a well-defined choice rather than
- * a flattering one, since it is applied identically to every planner.
+ * the run is the one that actually shows the planner working, typically the long haul
+ * from a grove to the depot. "Largest" is a well-defined choice rather than a
+ * flattering one, since it is applied identically to every planner.
  */
 function largestPlan(
   scenario: Scenario,

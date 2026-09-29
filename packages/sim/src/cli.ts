@@ -15,7 +15,7 @@ import { SCENARIOS, scenarioById } from './scenarios.js';
  * trust.
  */
 
-const USAGE = `rationauts — headless scenario runner
+const USAGE = `rationauts: headless scenario runner
 
 Usage:
   rationauts run <scenario> [planner]   Run one scenario and print its metrics
@@ -55,7 +55,7 @@ function runOne(scenarioId: string, plannerId: PlannerId): number {
   const report = runScenario(scenario, plannerId);
   const elapsed = performance.now() - started;
 
-  console.log(`${scenario.name} — ${plannerId}`);
+  console.log(`${scenario.name} / ${plannerId}`);
   console.log(scenario.brief);
   console.log('');
   console.log(
@@ -123,7 +123,7 @@ function list(): number {
       SCENARIOS.map((scenario) => [
         scenario.id,
         scenario.objective.kind,
-        scenario.expectedToFail.join(', ') || '—',
+        scenario.expectedToFail.join(', ') || 'none',
       ]),
     ),
   );

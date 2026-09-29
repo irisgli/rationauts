@@ -12,7 +12,7 @@ However, `typescript-eslint` does not yet support the TypeScript 7 API and refus
 load against it. That disables every type-aware lint rule in the project, which is not
 a cosmetic loss: `no-unnecessary-condition`, `switch-exhaustiveness-check` and
 `no-floating-promises` are the rules doing the most work here, and the first of them
-has already caught a real defect — an unreachable `undefined` branch in the quota
+has already caught a real defect: an unreachable `undefined` branch in the quota
 check that the compiler was happy with.
 
 The documented workaround is to install TypeScript 6 side by side with TypeScript 7 and

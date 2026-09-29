@@ -6,7 +6,7 @@ body:
     attributes:
       value: |
         Simulation bugs are usually reproducible exactly. If you can, include the
-        scenario name and seed — that is enough to replay the failure verbatim.
+        scenario name and seed, which is enough to replay the failure verbatim.
 
   - type: input
     id: scenario

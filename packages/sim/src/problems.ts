@@ -45,7 +45,7 @@ export function routingProblem(
  * heuristic must estimate remaining *cost*, but Manhattan distance counts remaining
  * *steps*; multiplying by the minimum cost per step converts between them without
  * ever overestimating. It is a no-op while the cheapest terrain costs 1, and it stops
- * being one the moment the cost table changes — which is exactly when a silent
+ * being one the moment the cost table changes, which is exactly when a silent
  * admissibility violation would be hardest to find.
  */
 export function routingHeuristic(goal: Position): Heuristic<Position> {
@@ -56,9 +56,9 @@ export function routingHeuristic(goal: Position): Heuristic<Position> {
  * Surveying: visit every listed site in any order, then return to base.
  *
  * The state is a position *and* the set of sites already visited, which is the point
- * of the exercise. Single-goal routing cannot express this — there is no one tile
- * that is the goal — and yet the same `aStarSearch` solves it unchanged, because the
- * algorithm was never told what a state is.
+ * of the exercise. Single-goal routing cannot express this, because there is no one
+ * tile that is the goal, and yet the same `aStarSearch` solves it unchanged, because
+ * the algorithm was never told what a state is.
  *
  * Visited sites are tracked as a bitmask rather than a set, so that `key` is cheap
  * and states compare by value. That caps a survey at 30 sites, which is far beyond

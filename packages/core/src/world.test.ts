@@ -13,7 +13,7 @@ import {
   type WorldState,
 } from './world.js';
 
-/** A three-wide strip: plains, mud, plains — the cheapest possible cost fixture. */
+/** A three-wide strip: plains, mud, plains. The cheapest possible cost fixture. */
 function strip(): WorldState {
   const { grid } = parseMap('.,.');
   return createWorld({

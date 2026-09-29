@@ -1,5 +1,5 @@
 /**
- * `@rationauts/sim` — the layer that binds algorithms to the game.
+ * `@rationauts/sim`: the layer that binds algorithms to the game.
  *
  * Adapters expressing Rationauts' problems as `SearchProblem`s, the installable
  * planners, the scenario ladder, the runner that measures a run, and a seeded maze

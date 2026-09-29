@@ -5,8 +5,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 /**
  * Drives a scenario one tick at a time against a wall clock.
  *
- * The simulation itself has no notion of real time — it advances by whole ticks and
- * nothing else — so this hook is the only place where the two are reconciled. It
+ * The simulation itself has no notion of real time, since it advances by whole ticks
+ * and nothing else, so this hook is the only place where the two are reconciled. It
  * accumulates elapsed milliseconds and spends them on whole ticks, which keeps the
  * run identical regardless of frame rate: a dropped frame catches up rather than
  * producing a different simulation.

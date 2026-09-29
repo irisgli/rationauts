@@ -7,7 +7,7 @@ pnpm install
 pnpm verify
 ```
 
-`pnpm verify` runs formatting, linting, typechecking and tests — byte for byte the gate
+`pnpm verify` runs formatting, linting, typechecking and tests, byte for byte the gate
 CI runs. If it is green locally, CI will be green.
 
 ## The shape of a change
@@ -27,7 +27,7 @@ These are enforced automatically, but knowing why they exist saves you a round t
    `@rationauts/agents`. Randomness comes from the seeded generator in `WorldState`.
    `@rationauts/sim` may read the clock; measuring is its job.
 2. **Layering.** `app → sim → agents → core`, one way only. `@rationauts/agents`
-   depends on nothing, including `core` — adapters belong in `sim`.
+   depends on nothing, including `core`. Adapters belong in `sim`.
 3. **No DOM below the client.** `core`, `agents` and `sim` typecheck against a DOM-free
    `lib` via `tsconfig.headless.json`.
 4. **No course material.** See [ADR 5](docs/adr/0005-no-course-materials-are-vendored.md).
@@ -56,12 +56,12 @@ docs(adr): record why course materials are not vendored
 Types: `feat`, `fix`, `perf`, `refactor`, `docs`, `test`, `build`, `ci`, `chore`.
 Scopes are package names (`core`, `agents`, `sim`, `app`) or `adr`, `repo`.
 
-Write the body for someone doing `git blame` in a year. Explain _why_, not _what_ —
-the diff already says what.
+Write the body for someone doing `git blame` in a year. Explain _why_, not _what_. The
+diff already says what.
 
 ## Architecture decisions
 
-If a change constrains future work — a new layer, a cross-cutting invariant, a
-dependency that is hard to remove, a deliberate deviation from an obvious default —
+If a change constrains future work, meaning a new layer, a cross-cutting invariant, a
+dependency that is hard to remove, or a deliberate deviation from an obvious default,
 add an ADR in `docs/adr/` and link it from the pull request. Ordinary feature work does
 not need one. See [ADR 1](docs/adr/0001-record-architecture-decisions.md).

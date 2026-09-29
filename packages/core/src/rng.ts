@@ -3,7 +3,7 @@
  *
  * Every stochastic decision in the simulation draws from this generator, and the
  * generator's state is carried inside {@link WorldState}. Nothing in the engine or
- * the agent library may call `Math.random` — a lint rule enforces it. The payoff is
+ * the agent library may call `Math.random`, and a lint rule enforces it. The payoff is
  * that a scenario is fully described by `(initialState, seed, intents)`, which is
  * what makes replays, golden tests and benchmarking possible at all.
  *

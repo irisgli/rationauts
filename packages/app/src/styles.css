@@ -1,9 +1,9 @@
 /*
- * Rationauts client — a survey plate on a light table at night.
+ * Rationauts client: a survey plate on a light table at night.
  *
  * Colour tokens are written onto :root by main.tsx from src/palette.ts, which the
  * canvas also reads. Type is an engraved serif for the plate title, an institutional
- * sans for the interface, and a mono for anything that is a figure — the ledger is
+ * sans for the interface, and a mono for anything that is a figure. The ledger is
  * meant to read as instrument output, not as prose.
  */
 
@@ -207,7 +207,7 @@ button {
  * The canvas is positioned out of flow on purpose.
  *
  * It sizes itself from its container, so if it also contributed to that container's
- * width the two would chase each other upward on every resize — which they did, and
+ * width the two would chase each other upward on every resize, which they did, and
  * on a phone the document grew to eight thousand pixels wide before anyone noticed,
  * because a fixed grid column was hiding it on desktop. Taking the canvas out of flow
  * breaks the loop at the source rather than patching it with a max-width.

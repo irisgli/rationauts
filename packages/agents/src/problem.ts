@@ -4,9 +4,9 @@
  * Nothing in this package knows about Rationauts. A search algorithm here takes a
  * {@link SearchProblem} and returns a {@link SearchOutcome}; the adapters that express
  * the game's problems in these terms live in `@rationauts/sim`. The payoff is that
- * every algorithm can be validated against problems with independently known answers —
- * the eight-puzzle, or a grid where uniform-cost search provides ground truth — rather
- * than only against the project's own levels.
+ * every algorithm can be validated against problems with independently known answers,
+ * such as the eight-puzzle or a grid where uniform-cost search provides ground truth,
+ * rather than only against the project's own levels.
  *
  * @see docs/adr/0004-algorithms-are-game-agnostic.md
  */
@@ -76,7 +76,7 @@ export interface SearchStats {
   readonly expanded: number;
   /** Successor states generated, including ones immediately discarded. */
   readonly generated: number;
-  /** High-water mark of the frontier — a proxy for peak memory. */
+  /** High-water mark of the frontier, as a proxy for peak memory. */
   readonly maxFrontier: number;
 }
 
@@ -91,7 +91,7 @@ export type SearchFailure =
  * The result of a search.
  *
  * A discriminated union rather than `Result | null`, so that callers must handle
- * failure explicitly and so that statistics are available either way — a search that
+ * failure explicitly and so that statistics are available either way. A search that
  * found nothing after expanding 40,000 states is exactly the interesting case in a
  * benchmark.
  */
@@ -127,9 +127,9 @@ export interface SearchOptions<S = unknown> {
    *
    * This exists so a caller can *see* the search rather than only its summary. The
    * difference between A\* and uniform-cost search on an open map is not a difference
-   * in the answer — both return the same path at the same cost — it is a difference
-   * in how much of the map each one had to look at, and a count alone does not convey
-   * that the way a shaded region does.
+   * in the answer, since both return the same path at the same cost. It is a
+   * difference in how much of the map each one had to look at, and a count alone does
+   * not convey that the way a shaded region does.
    *
    * Reporting happens at expansion rather than at generation so the sequence matches
    * `stats.expanded` exactly. Omitting the callback costs nothing measurable; it is a

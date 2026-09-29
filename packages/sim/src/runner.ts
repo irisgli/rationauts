@@ -25,7 +25,7 @@ import type { PlanTelemetry } from './telemetry.js';
 
 /** Everything measurable about a run so far. */
 export interface RunMetrics {
-  /** Simulation ticks elapsed — the player-visible "how long did that take". */
+  /** Simulation ticks elapsed: the player-visible "how long did that take". */
   readonly ticks: number;
   /** Total terrain cost paid for movement. */
   readonly pathCost: number;
@@ -61,8 +61,8 @@ export interface RunSnapshot {
   /**
    * Position keys every bot has stood on.
    *
-   * Surveying leaves no trace in the world — a surveyed grove looks exactly like an
-   * unsurveyed one — so without this the client cannot show progress, and a player
+   * Surveying leaves no trace in the world, since a surveyed grove looks exactly like
+   * an unsurveyed one. Without this the client cannot show progress, and a player
    * watching a survey has no way to tell how much is left.
    */
   readonly visited: ReadonlySet<string>;
@@ -72,7 +72,7 @@ export interface RunSnapshot {
 export interface Run {
   readonly scenario: Scenario;
   readonly planner: PlannerId;
-  /** The intents issued on each tick so far — enough to replay the run exactly. */
+  /** The intents issued on each tick so far: enough to replay the run exactly. */
   readonly intents: readonly (readonly Intent[])[];
   snapshot(): RunSnapshot;
   /** Advances one tick, or returns the current snapshot unchanged once finished. */
@@ -90,7 +90,7 @@ export interface RunOptions {
  * A survey is finished when every grove has been stood on and a bot is home again.
  *
  * Surveying consumes nothing, so completion cannot be read off the world state alone
- * — a surveyed grove looks exactly like an unsurveyed one. The run therefore keeps
+ * because a surveyed grove looks exactly like an unsurveyed one. The run therefore keeps
  * its own record of where bots have been, accumulated from the positions it observes.
  */
 function surveyComplete(state: WorldState, visited: ReadonlySet<string>): boolean {
@@ -205,7 +205,7 @@ export interface RunReport {
   readonly planner: PlannerId;
   readonly succeeded: boolean;
   readonly metrics: RunMetrics;
-  /** The intent issued on each tick — everything needed to replay the run exactly. */
+  /** The intent issued on each tick: everything needed to replay the run exactly. */
   readonly intents: readonly (readonly Intent[])[];
   readonly finalState: WorldState;
 }

@@ -13,7 +13,7 @@ import type { PlannerId } from './navigators.js';
  * The difficulty ladder.
  *
  * Every scenario exists to make one planner fail visibly so the next one has a reason
- * to exist. `expectedToFail` is not documentation — the test suite asserts it, which
+ * to exist. `expectedToFail` is not documentation. The test suite asserts it, which
  * means a change that quietly makes breadth-first search good enough on `mudflats`
  * breaks the build rather than hollowing out the lesson.
  *
@@ -107,7 +107,7 @@ export const SCENARIOS: readonly Scenario[] = [
     name: 'Great Plain',
     brief: 'A wide, nearly empty map. Both optimal planners find exactly the same route.',
     lesson:
-      'Uniform-cost search and A* return identical paths here, at identical cost. The only difference is how many tiles each had to examine to be certain — which is the entire argument for a heuristic, and it is invisible unless you count.',
+      'Uniform-cost search and A* return identical paths here, at identical cost. The only difference is how many tiles each had to examine to be certain, which is the entire argument for a heuristic, and it is invisible unless you count.',
     map: `
 ................................
 ................................
@@ -139,7 +139,7 @@ export const SCENARIOS: readonly Scenario[] = [
     name: 'Four Groves',
     brief: 'Survey all four groves and report back to the depot.',
     lesson:
-      'There is no single goal tile any more. The state has to carry which groves have been visited, and the same A* solves it unchanged — which is the point of writing the algorithm against a problem rather than against a grid.',
+      'There is no single goal tile any more. The state has to carry which groves have been visited, and the same A* solves it unchanged, which is the point of writing the algorithm against a problem rather than against a grid.',
     map: `
 #############
 #.T.......T.#

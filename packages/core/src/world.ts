@@ -303,7 +303,7 @@ export function step(state: WorldState, intents: readonly Intent[]): StepResult 
     }
   }
 
-  // Cooldowns tick down once per simulation tick, after actions resolve — including
+  // Cooldowns tick down once per simulation tick, after actions resolve, including
   // for the bot that just acted. An action costing C therefore occupies exactly C
   // ticks: the tick it was issued on, plus `C - 1` ticks of enforced idleness.
   const nextBots = state.bots.map((original) => {
