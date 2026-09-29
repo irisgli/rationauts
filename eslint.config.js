@@ -81,8 +81,8 @@ export default tseslint.config(
   {
     files: ['packages/agents/src/**/*.ts'],
     rules: forbiddenImports(
-      [{ group: ['@rationauts/sim*', '@rationauts/app*'] }],
-      'agents may depend on core only. Scenario wiring belongs in sim.',
+      [{ group: ['@rationauts/*'] }],
+      'agents depends on nothing, including core. Adapters belong in sim (ADR 4).',
     ),
   },
   {

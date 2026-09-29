@@ -10,7 +10,7 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'lcov'],
       include: ['packages/core/src/**', 'packages/agents/src/**', 'packages/sim/src/**'],
-      exclude: ['**/*.test.ts', '**/index.ts', 'packages/sim/src/cli.ts'],
+      exclude: ['**/*.test.ts', '**/index.ts', '**/__fixtures__/**', 'packages/sim/src/cli.ts'],
       thresholds: {
         lines: 90,
         functions: 90,
