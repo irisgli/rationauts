@@ -113,7 +113,7 @@ export type SearchOutcome<S, A> =
     };
 
 /** Options common to every search in this package. */
-export interface SearchOptions {
+export interface SearchOptions<S = unknown> {
   /**
    * Maximum number of expansions before giving up.
    *
@@ -121,6 +121,21 @@ export interface SearchOptions {
    * hanging a browser tab. Defaults to 1,000,000.
    */
   readonly maxExpansions?: number;
+
+  /**
+   * Called with each state as it is expanded, in expansion order.
+   *
+   * This exists so a caller can *see* the search rather than only its summary. The
+   * difference between A\* and uniform-cost search on an open map is not a difference
+   * in the answer — both return the same path at the same cost — it is a difference
+   * in how much of the map each one had to look at, and a count alone does not convey
+   * that the way a shaded region does.
+   *
+   * Reporting happens at expansion rather than at generation so the sequence matches
+   * `stats.expanded` exactly. Omitting the callback costs nothing measurable; it is a
+   * single undefined check per expansion.
+   */
+  readonly onExpand?: (state: S, order: number) => void;
 }
 
 export const DEFAULT_MAX_EXPANSIONS = 1_000_000;
