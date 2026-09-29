@@ -12,9 +12,9 @@ and every line of it is about the problem at hand.
 It also makes the implementation untestable against anything but itself. If `aStar`
 takes a `Grid`, then the only way to check that it is correct is to run it on grids
 this project invented, and the only oracle available is another function in the same
-file. Worse, the moment a second search problem appears — "visit all four groves",
-which searches over `(position, visited-set)` rather than over positions — the
-grid-shaped signature stops fitting and the algorithm has to be rewritten.
+file. Worse, the moment a second search problem appears ("visit all four groves", which
+searches over `(position, visited-set)` rather than over positions), the grid-shaped
+signature stops fitting and the algorithm has to be rewritten.
 
 ## Decision
 
@@ -37,9 +37,9 @@ The adapters that express Rationauts' own problems in these terms live in
 
 ## Consequences
 
-- Search is validated against problems with independently known answers — the
-  8-puzzle, and grids where an exhaustive or uniform-cost oracle gives ground truth —
-  rather than only against the game.
+- Search is validated against problems with independently known answers (the 8-puzzle,
+  and grids where an exhaustive or uniform-cost oracle gives ground truth) rather than
+  only against the game.
 - Multi-goal routing reuses the same `aStar` with a different state type, at no cost.
 - `key(state)` exists because JavaScript has no structural equality and no value types;
   the alternative was forcing every state into a string, which would be worse.

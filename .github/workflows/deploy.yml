@@ -7,7 +7,7 @@ on:
 
 # The published client is a build artefact of `main`. Only one deployment may be in
 # flight at a time, and a newer commit should win rather than queue behind an older
-# one — but an in-progress deployment is never cancelled, because a half-published
+# one. An in-progress deployment is never cancelled, though, because a half-published
 # site is worse than a slightly stale one.
 concurrency:
   group: pages

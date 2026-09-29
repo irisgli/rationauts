@@ -15,7 +15,7 @@ world is designed so that each technique is introduced by the _visible failure_ 
 one before it.
 
 This inverts the usual relationship between a game and its tutorial. The scenario is
-not an explanation of the algorithm — it is the argument for the algorithm's existence.
+not an explanation of the algorithm. It is the argument for the algorithm's existence.
 
 ## Goals
 
@@ -55,7 +55,7 @@ that contention between agents does not depend on the caller's array order (ADR 
 The key modelling decision is that **terrain cost is spent in time, not merely scored**.
 Entering a tile of cost _C_ puts the bot on cooldown for _C_ ticks. Mud costs eight.
 A breadth-first router that optimises step count therefore does not just score worse
-than uniform-cost search — it visibly crawls, on screen, while the player watches. The
+than uniform-cost search. It visibly crawls, on screen, while the player watches. The
 cost table is the game's core tuning surface precisely because it is what separates one
 algorithm from the next.
 
@@ -87,7 +87,7 @@ This is also where wall-clock measurement is allowed.
 ### `@rationauts/app`
 
 React and canvas. Rendering, the module-install interface, and the debug overlays that
-make the algorithms legible — the A\* frontier, expansion counts, the chosen path
+make the algorithms legible: the A\* frontier, expansion counts, the chosen path
 against the path the previous tier would have taken.
 
 ## The Search tier
@@ -126,5 +126,5 @@ cost, and the only visible difference is how much of the map each one had to loo
 - **TypeScript for numeric AI code.** Less idiomatic and slower than Python. Accepted in
   exchange for a single toolchain and a clickable artefact (ADR 2).
 - **The failure-driven ladder could feel punitive** rather than instructive. Mitigated by
-  overlays that show _why_ a module failed — the wall it hit, the mud it crossed, the
+  overlays that show _why_ a module failed: the wall it hit, the mud it crossed, the
   fraction of the map it searched.

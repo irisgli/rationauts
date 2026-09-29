@@ -1,5 +1,5 @@
 /**
- * `@rationauts/agents` — classical AI algorithms, independent of any game.
+ * `@rationauts/agents`: classical AI algorithms, independent of any game.
  *
  * This package deliberately depends on nothing, including `@rationauts/core`.
  * Algorithms are written against small structural interfaces describing a *problem*,

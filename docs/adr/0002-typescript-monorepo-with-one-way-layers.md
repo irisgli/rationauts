@@ -11,15 +11,16 @@ have genuinely different requirements. The engine must be deterministic and fast
 algorithm library should be usable by someone who has never heard of this game. The
 harness needs a clock and a filesystem. The client needs the DOM.
 
-Putting all four in one package would let the client's needs leak into the engine —
-the classic failure where a "pure" core quietly grows a dependency on rendering.
+Putting all four in one package would let the client's needs leak into the engine, the
+classic failure where a "pure" core quietly grows a dependency on rendering.
 Splitting them into four repositories would be worse: every change to the engine's
 state shape would become a cross-repository version dance for no benefit at this size.
 
 A second question sits underneath: which language. The algorithms are most idiomatic
 in Python, which is also what both reference courses use. But a browser-playable
 artefact was a hard requirement, and a Python core would mean either a second language
-for the client or a WASM bridge — two toolchains to keep excellent instead of one.
+for the client or a WASM bridge, meaning two toolchains to keep excellent instead of
+one.
 
 ## Decision
 
@@ -31,10 +32,10 @@ app  ->  sim  ->  agents
    ------------>  core
 ```
 
-- `@rationauts/core` — the deterministic engine. Depends on nothing.
-- `@rationauts/agents` — AI algorithms. Depends on nothing, deliberately (see ADR 4).
-- `@rationauts/sim` — scenarios, runners, metrics, replay. Depends on core and agents.
-- `@rationauts/app` — the browser client. Depends on all three.
+- `@rationauts/core`: the deterministic engine. Depends on nothing.
+- `@rationauts/agents`: AI algorithms. Depends on nothing, deliberately (see ADR 4).
+- `@rationauts/sim`: scenarios, runners, metrics, replay. Depends on core and agents.
+- `@rationauts/app`: the browser client. Depends on all three.
 
 The direction is enforced mechanically rather than by convention, using per-package
 `no-restricted-imports` overrides in `eslint.config.js`. A violation fails CI.

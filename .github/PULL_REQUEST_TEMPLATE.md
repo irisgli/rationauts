@@ -9,7 +9,7 @@
 
 ## How it was verified
 
-<!-- Not "tests pass" — say what you actually checked. -->
+<!-- Not "tests pass". Say what you actually checked. -->
 
 - [ ] `pnpm verify` passes locally
 - [ ] New behaviour is covered by tests that fail without the change

@@ -14,7 +14,7 @@ import {
  *
  * Every algorithm here is a *graph* search: it keeps a record of states already seen
  * so that it never re-explores one. On a grid this is not an optimisation but a
- * correctness requirement — the state space is cyclic, and tree search would not
+ * correctness requirement: the state space is cyclic, and tree search would not
  * terminate.
  *
  * All four test for the goal when a node is **expanded**, not when it is generated.
@@ -203,8 +203,8 @@ export function uniformCostSearch<S, A>(
 }
 
 /**
- * A\* search. Optimal when `heuristic` is admissible — that is, when it never
- * overestimates the true remaining cost.
+ * A\* search. Optimal when `heuristic` is admissible, meaning it never overestimates
+ * the true remaining cost.
  *
  * An inadmissible heuristic does not fail loudly; it quietly returns a suboptimal
  * path. The test suite therefore checks admissibility directly against true

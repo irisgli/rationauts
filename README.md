@@ -26,8 +26,8 @@
 ---
 
 Your bots start as reflex agents: they step toward what they want and get stuck on the
-first wall. You make them smarter by installing techniques — breadth-first search, then
-uniform-cost, then A\* — and every map is built so the previous one _visibly fails_
+first wall. You make them smarter by installing techniques, first breadth-first search,
+then uniform-cost, then A\*, and every map is built so the previous one _visibly fails_
 before the next is unlocked.
 
 <table>
@@ -51,7 +51,7 @@ pnpm dev
 ```
 
 ```bash
-pnpm verify      # format, lint, typecheck, test — exactly what CI runs
+pnpm verify      # format, lint, typecheck, test: exactly what CI runs
 pnpm sim bench   # every planner against every scenario, headless
 ```
 
@@ -70,7 +70,7 @@ Requires Node 22+ and pnpm 10+.
 
 <p align="center">
   Curriculum follows CMU <a href="https://www.cs.cmu.edu/~15281-f23/">15-281</a> and UC Berkeley <a href="https://inst.eecs.berkeley.edu/~cs188/fa26/">CS 188</a>.<br>
-  No course code or assets are used — see <a href="docs/adr/0005-no-course-materials-are-vendored.md">ADR 5</a>.
+  No course code or assets are used. See <a href="docs/adr/0005-no-course-materials-are-vendored.md">ADR 5</a>.
 </p>
 
 <p align="center">

@@ -11,7 +11,7 @@ import {
 } from '@rationauts/agents';
 
 /**
- * The installable modules — the game's tech tree, expressed as code.
+ * The installable modules: the game's tech tree, expressed as code.
  *
  * A planner is the thing a player fits to a bot. Uninformed planners ignore the
  * heuristic they are handed; keeping the signature uniform means the controller does

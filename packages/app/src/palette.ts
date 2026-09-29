@@ -11,7 +11,7 @@ import { Terrain } from '@rationauts/core';
  * The direction is a survey plate: drafting film over a light table at night. Ink
  * and graphite carry the sheet, brass marks the route a planner chose, and teal is
  * reserved exclusively for what the planner examined. Nothing else is allowed to be
- * teal — the overlay is the one thing this interface exists to show.
+ * teal, because the overlay is the one thing this interface exists to show.
  */
 export const PALETTE = {
   ink: '#0E1417',

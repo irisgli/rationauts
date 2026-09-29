@@ -19,7 +19,7 @@ import {
  * seed is all a bug report needs to carry.
  *
  * The algorithm is randomised depth-first carving on a half-resolution lattice, which
- * yields a perfect maze — exactly one route between any two cells. That is the
+ * yields a perfect maze, with exactly one route between any two cells. That is the
  * interesting shape for search benchmarks: no shortcuts to stumble into, and a long
  * solution relative to the map size.
  */

@@ -52,7 +52,7 @@ export function App(): React.JSX.Element {
       <header className="masthead">
         <div className="masthead__identity">
           <h1 className="wordmark">Rationauts</h1>
-          <p className="tagline">Colony survey — teach the bots to think</p>
+          <p className="tagline">Colony survey: teach the bots to think</p>
         </div>
         <div className="masthead__sheet">
           <span className="eyebrow">Sheet {sheetNumber}</span>
@@ -202,7 +202,7 @@ function statusLine(status: string, ticks: number): string {
     case 'complete':
       return `Objective met in ${String(ticks)} ticks.`;
     case 'stalled':
-      return 'Out of ticks. This module cannot finish this sheet — try the next one down.';
+      return 'Out of ticks. This module cannot finish this sheet. Try the next one down.';
     case 'running':
       return 'Running.';
     default:

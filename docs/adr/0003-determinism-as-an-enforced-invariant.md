@@ -8,7 +8,7 @@
 Nearly everything Rationauts wants to do downstream depends on being able to replay a
 simulation exactly: golden-file tests that assert on a specific path rather than only
 its cost, benchmark comparisons between two planners, bug reports reduced to a
-scenario name and a seed, and — later — reinforcement learning, where a stochastic
+scenario name and a seed, and, later, reinforcement learning, where a stochastic
 environment must still be reproducible across runs.
 
 Determinism is easy to state and very easy to lose. One `Math.random` in a tie-break,
@@ -39,7 +39,8 @@ is enforced by tooling rather than by discipline.
 ## Consequences
 
 - A scenario is fully described by `(initialState, seed, intents)`. Replays are
-  therefore a list of intents, not a list of states — small and diffable.
+  therefore a list of intents, not a list of states, which keeps them small and
+  diffable.
 - Tests can assert exact paths. This catches a whole class of subtle regressions that
   cost-only assertions miss, such as an unstable priority queue.
 - The purely functional PRNG is more verbose at call sites than a mutable one. That

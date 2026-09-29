@@ -4,7 +4,7 @@
  * Ties are broken by insertion order, which makes the queue behave like a FIFO among
  * equal priorities. That is not an implementation detail: a bare heap breaks ties by
  * whatever the sift operations happen to do, so two runs of A\* over the same problem
- * can return different — equally optimal — paths. Golden-file tests and replay
+ * can return different (but equally optimal) paths. Golden-file tests and replay
  * comparison both need the choice to be stable.
  */
 export class PriorityQueue<T> {
