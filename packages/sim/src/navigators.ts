@@ -5,6 +5,7 @@ import {
   greedyBestFirstSearch,
   uniformCostSearch,
   type Heuristic,
+  type SearchOptions,
   type SearchOutcome,
   type SearchProblem,
 } from '@rationauts/agents';
@@ -24,7 +25,11 @@ export interface Planner {
   readonly blurb: string;
   /** True when the planner returns a least-cost path on any non-negative costs. */
   readonly optimal: boolean;
-  solve<S, A>(problem: SearchProblem<S, A>, heuristic: Heuristic<S>): SearchOutcome<S, A>;
+  solve<S, A>(
+    problem: SearchProblem<S, A>,
+    heuristic: Heuristic<S>,
+    options?: SearchOptions<S>,
+  ): SearchOutcome<S, A>;
 }
 
 export const PLANNER_IDS = ['reflex', 'dfs', 'bfs', 'ucs', 'greedy', 'astar'] as const;
@@ -41,35 +46,35 @@ export const PLANNERS: Readonly<Record<Exclude<PlannerId, 'reflex'>, Planner>> =
     label: 'Depth-first',
     blurb: 'Commits to a direction and follows it. Arrives eventually, rarely sensibly.',
     optimal: false,
-    solve: (problem) => depthFirstSearch(problem),
+    solve: (problem, _heuristic, options) => depthFirstSearch(problem, options),
   },
   bfs: {
     id: 'bfs',
     label: 'Breadth-first',
     blurb: 'Finds the route with the fewest steps. Has no idea what a step costs.',
     optimal: false,
-    solve: (problem) => breadthFirstSearch(problem),
+    solve: (problem, _heuristic, options) => breadthFirstSearch(problem, options),
   },
   ucs: {
     id: 'ucs',
     label: 'Uniform-cost',
     blurb: 'Finds the cheapest route. Looks everywhere to be sure of it.',
     optimal: true,
-    solve: (problem) => uniformCostSearch(problem),
+    solve: (problem, _heuristic, options) => uniformCostSearch(problem, options),
   },
   greedy: {
     id: 'greedy',
     label: 'Greedy best-first',
     blurb: 'Runs at the goal and hopes. Fast, and sometimes badly wrong.',
     optimal: false,
-    solve: (problem, heuristic) => greedyBestFirstSearch(problem, heuristic),
+    solve: (problem, heuristic, options) => greedyBestFirstSearch(problem, heuristic, options),
   },
   astar: {
     id: 'astar',
     label: 'A*',
     blurb: 'The cheapest route, without looking everywhere for it.',
     optimal: true,
-    solve: (problem, heuristic) => aStarSearch(problem, heuristic),
+    solve: (problem, heuristic, options) => aStarSearch(problem, heuristic, options),
   },
 };
 

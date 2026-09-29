@@ -174,3 +174,46 @@ describe('A* on the survey problem', () => {
     expect(informed.stats.expanded).toBeLessThan(optimal.stats.expanded);
   });
 });
+
+describe('plan telemetry', () => {
+  it('records the tiles a planner examined, in expansion order', async () => {
+    const { createController } = await import('./controller.js');
+    const { buildWorld, scenarioById } = await import('./scenarios.js');
+    const scenario = scenarioById('great-plain');
+    expect(scenario).toBeDefined();
+    if (scenario === undefined) return;
+
+    const world = buildWorld(scenario);
+    const bot = world.bots[0];
+    expect(bot).toBeDefined();
+    if (bot === undefined) return;
+
+    const controller = createController('astar', scenario.objective);
+    controller.decide(world, bot.id);
+    const plan = controller.lastPlan;
+
+    expect(plan).not.toBeNull();
+    if (plan === null) return;
+    // The overlay prints `expanded` beside the shaded region, so the two must agree
+    // exactly or the picture is quietly lying about the number next to it.
+    expect(plan.explored.length).toBe(plan.stats.expanded);
+    expect(plan.explored[0]).toEqual(bot.position);
+  });
+
+  it('shows a reflex agent examining only its immediate neighbours', async () => {
+    const { createController } = await import('./controller.js');
+    const { buildWorld, scenarioById } = await import('./scenarios.js');
+    const scenario = scenarioById('open-field');
+    expect(scenario).toBeDefined();
+    if (scenario === undefined) return;
+
+    const world = buildWorld(scenario);
+    const bot = world.bots[0];
+    expect(bot).toBeDefined();
+    if (bot === undefined) return;
+
+    const controller = createController('reflex', scenario.objective);
+    controller.decide(world, bot.id);
+    expect(controller.lastPlan?.explored.length).toBeLessThanOrEqual(4);
+  });
+});
