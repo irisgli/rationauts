@@ -181,6 +181,12 @@ export function createReflexController(objective: Objective): Controller {
         stats: EMPTY_STATS,
         route: chosen === null ? [] : [bot.position, translate(bot.position, chosen)],
         directions: chosen === null ? [] : [chosen],
+        // A reflex agent examines the four tiles it can reach and nothing else. The
+        // overlay showing that against A*'s spread is the clearest single picture of
+        // what search actually buys.
+        explored: DIRECTIONS.map((direction) => translate(bot.position, direction)).filter(
+          (candidate) => isWalkable(state.grid, candidate),
+        ),
       };
 
       // Strictly downhill only. Allowing a sideways move would let it escape some
@@ -294,7 +300,10 @@ function planRoute(
   to: Position,
   planner: ReturnType<typeof plannerById>,
 ): PlanTelemetry {
-  const outcome = planner.solve(routingProblem(state.grid, from, to), routingHeuristic(to));
+  const explored: Position[] = [];
+  const outcome = planner.solve(routingProblem(state.grid, from, to), routingHeuristic(to), {
+    onExpand: (position) => explored.push(position),
+  });
   return {
     planner: planner.id,
     from,
@@ -305,6 +314,7 @@ function planRoute(
     stats: outcome.stats,
     route: outcome.found ? outcome.states : [],
     directions: outcome.found ? outcome.path : [],
+    explored,
   };
 }
 
@@ -327,9 +337,11 @@ function planSurvey(
   const sites = surveySites(state).filter((site) => !visited.has(positionKey(site)));
   if (sites.length === 0) return planRoute(state, from, home, planner);
 
+  const explored: Position[] = [];
   const outcome = planner.solve(
     surveyProblem(state.grid, from, sites, home),
     surveyHeuristic(sites, home),
+    { onExpand: (surveyState) => explored.push(surveyState.position) },
   );
   if (!outcome.found) {
     return {
@@ -342,6 +354,7 @@ function planSurvey(
       stats: outcome.stats,
       route: [],
       directions: [],
+      explored,
     };
   }
 
@@ -366,6 +379,7 @@ function planSurvey(
     stats: outcome.stats,
     route: leg,
     directions: toDirections(leg),
+    explored,
   };
 }
 
