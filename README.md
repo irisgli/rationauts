@@ -12,6 +12,8 @@ The premise is borrowed from [Autonauts](https://autonauts.fandom.com/), where y
 teach robots by recording a literal loop of your own actions. Rationauts swaps that one
 axis: you do not record a loop, you install a way of thinking.
 
+**[Play it](https://irisgli.github.io/rationauts/)** — pick a sheet, install a module, press Run.
+
 > **Status:** early. The Search tier is complete and playable. Later tiers are
 > tracked in [docs/ROADMAP.md](docs/ROADMAP.md).
 
@@ -30,6 +32,10 @@ It is a game, but the engineering is the point:
 - **The test suite and the game levels are the same artefact.** Every scenario is a
   headless, seeded benchmark that records ticks, path cost and nodes expanded, and also
   a level you can play.
+- **The client draws what the planner looked at.** On `great-plain`, A\* and
+  uniform-cost search return the same route at the same cost; A\* examines 573 tiles
+  and uniform-cost examines 1,664. The overlay is that difference, shaded by expansion
+  order, and it is the one thing a table cannot show you.
 
 ## Quick start
 

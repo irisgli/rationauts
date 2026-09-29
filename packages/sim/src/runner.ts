@@ -58,6 +58,14 @@ export interface RunSnapshot {
   readonly plans: ReadonlyMap<BotId, PlanTelemetry | null>;
   /** Events from the tick just applied. */
   readonly events: readonly SimEvent[];
+  /**
+   * Position keys every bot has stood on.
+   *
+   * Surveying leaves no trace in the world — a surveyed grove looks exactly like an
+   * unsurveyed one — so without this the client cannot show progress, and a player
+   * watching a survey has no way to tell how much is left.
+   */
+  readonly visited: ReadonlySet<string>;
 }
 
 /** A run that can be advanced one tick at a time. */
@@ -138,6 +146,7 @@ export function createRun(scenario: Scenario, planner: PlannerId, options: RunOp
       finished: succeeded || state.tick >= maxTicks,
       plans: new Map(plans),
       events,
+      visited: new Set(visited),
     };
   };
 

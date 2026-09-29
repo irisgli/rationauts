@@ -1,0 +1,450 @@
+/*
+ * Rationauts client — a survey plate on a light table at night.
+ *
+ * Colour tokens are written onto :root by main.tsx from src/palette.ts, which the
+ * canvas also reads. Type is an engraved serif for the plate title, an institutional
+ * sans for the interface, and a mono for anything that is a figure — the ledger is
+ * meant to read as instrument output, not as prose.
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: 'IBM Plex Sans', system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 2px;
+}
+
+.app {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  grid-template-columns: minmax(0, 1fr);
+  height: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 24px 20px;
+}
+
+/* --- Masthead ------------------------------------------------------------ */
+
+.masthead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 22px 0 14px;
+  border-bottom: 1px solid var(--rule);
+  flex-wrap: wrap;
+}
+
+.wordmark {
+  margin: 0;
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  line-height: 1;
+}
+
+.tagline {
+  margin: 6px 0 0;
+  color: var(--graphite);
+  font-size: 13px;
+}
+
+.masthead__sheet {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.sheet-name {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-size: 22px;
+  font-style: italic;
+}
+
+.eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--graphiteDim);
+}
+
+/* --- Workspace ----------------------------------------------------------- */
+
+.workspace {
+  display: grid;
+  grid-template-columns: 236px minmax(0, 1fr);
+  min-width: 0;
+  gap: 24px;
+  min-height: 0;
+  padding: 18px 0;
+}
+
+.rail {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.rail__group h2 {
+  margin: 0 0 8px;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.list__item {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  width: 100%;
+  padding: 7px 10px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease;
+}
+
+.list__item:hover {
+  background: var(--plate);
+}
+
+.list__item.is-active {
+  background: var(--plate);
+  border-color: var(--rule);
+}
+
+.list__item--module {
+  flex-direction: column;
+  gap: 2px;
+}
+
+.list__index {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--graphiteDim);
+}
+
+.list__item.is-active .list__index {
+  color: var(--brass);
+}
+
+.list__label {
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.list__blurb {
+  font-size: 12px;
+  color: var(--graphite);
+  line-height: 1.4;
+}
+
+.badge {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--brass);
+  border: 1px solid var(--brassDim);
+  border-radius: 2px;
+  padding: 1px 4px;
+}
+
+/* --- The plate ----------------------------------------------------------- */
+
+.main {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 14px;
+  min-height: 0;
+  min-width: 0;
+}
+
+/*
+ * The canvas is positioned out of flow on purpose.
+ *
+ * It sizes itself from its container, so if it also contributed to that container's
+ * width the two would chase each other upward on every resize — which they did, and
+ * on a phone the document grew to eight thousand pixels wide before anyone noticed,
+ * because a fixed grid column was hiding it on desktop. Taking the canvas out of flow
+ * breaks the loop at the source rather than patching it with a max-width.
+ */
+.plate {
+  position: relative;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+  background: var(--plate);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+}
+
+.plate canvas {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: block;
+  image-rendering: pixelated;
+}
+
+.fieldnote {
+  margin: 0;
+  max-width: 78ch;
+  color: var(--graphite);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.fieldnote__mark {
+  display: inline-block;
+  margin-right: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--brass);
+}
+
+/* --- Ledger -------------------------------------------------------------- */
+
+.ledger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  padding: 14px 0;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  /* Without wrapping, this row's min-content width sets a floor for the whole grid
+     column, and on a phone that floor is wider than the screen. */
+  flex-wrap: wrap;
+}
+
+.control {
+  padding: 7px 14px;
+  background: transparent;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  cursor: pointer;
+  transition:
+    border-color 120ms ease,
+    color 120ms ease;
+}
+
+.control:hover:not(:disabled) {
+  border-color: var(--graphite);
+}
+
+.control:disabled {
+  color: var(--graphiteDim);
+  cursor: not-allowed;
+}
+
+.control--primary {
+  border-color: var(--brassDim);
+  color: var(--brass);
+}
+
+.control--primary:hover {
+  border-color: var(--brass);
+}
+
+.speed {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 8px;
+}
+
+.speed input {
+  width: 96px;
+  accent-color: var(--brass);
+}
+
+.speed__value {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  color: var(--graphite);
+  min-width: 40px;
+}
+
+.metrics {
+  display: flex;
+  gap: 26px;
+  margin: 0;
+  flex-wrap: wrap;
+}
+
+.metric dt {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--graphiteDim);
+}
+
+.metric dd {
+  margin: 2px 0 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 21px;
+  font-variant-numeric: tabular-nums;
+}
+
+.metric--accent dd {
+  color: var(--teal);
+}
+
+.status {
+  margin: 0;
+  font-size: 13px;
+  color: var(--graphite);
+}
+
+.status--complete {
+  color: var(--brass);
+}
+
+.status--stalled {
+  color: var(--rust);
+}
+
+/* --- Legend -------------------------------------------------------------- */
+
+.legend {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding-top: 12px;
+  font-size: 12px;
+  color: var(--graphite);
+}
+
+.legend__item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.legend__cost {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--graphiteDim);
+}
+
+.swatch {
+  width: 12px;
+  height: 12px;
+  border: 1px solid var(--rule);
+  border-radius: 1px;
+}
+
+.swatch--plains {
+  background: var(--terrain-plains);
+}
+.swatch--forest {
+  background: var(--terrain-forest);
+}
+.swatch--mud {
+  background: var(--terrain-mud);
+}
+.swatch--rock {
+  background: var(--terrain-rock);
+}
+.swatch--water {
+  background: var(--terrain-water);
+}
+.swatch--explored {
+  background: color-mix(in srgb, var(--teal) 34%, var(--terrain-plains));
+  border-color: var(--teal);
+}
+
+/* --- Narrow screens ------------------------------------------------------ */
+
+@media (max-width: 860px) {
+  .app {
+    height: auto;
+    min-height: 100%;
+    padding: 0 16px 20px;
+  }
+
+  .workspace {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* The map is the point; on a narrow screen it comes before the pickers. */
+  .main {
+    order: -1;
+    min-height: 62vh;
+  }
+
+  .rail {
+    overflow: visible;
+  }
+
+  .ledger {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
