@@ -266,3 +266,57 @@ describe('search invariants', () => {
     );
   });
 });
+
+describe('expansion reporting', () => {
+  it('reports every expanded state, in order, for each algorithm', () => {
+    const { grid, start, goal } = randomCostGrid(23, 10, 10);
+    const problem = gridProblem(grid, start, goal);
+
+    const runs = [
+      (onExpand: (cell: Cell, order: number) => void) => breadthFirstSearch(problem, { onExpand }),
+      (onExpand: (cell: Cell, order: number) => void) => depthFirstSearch(problem, { onExpand }),
+      (onExpand: (cell: Cell, order: number) => void) => uniformCostSearch(problem, { onExpand }),
+      (onExpand: (cell: Cell, order: number) => void) =>
+        aStarSearch(problem, (cell) => manhattan(cell, goal), { onExpand }),
+      (onExpand: (cell: Cell, order: number) => void) =>
+        greedyBestFirstSearch(problem, (cell) => manhattan(cell, goal), { onExpand }),
+    ];
+
+    for (const run of runs) {
+      const seen: number[] = [];
+      const outcome = run((_cell, order) => seen.push(order));
+      // The callback fires exactly once per expansion, so its count must agree with
+      // the reported statistic rather than merely resemble it.
+      expect(seen.length).toBe(outcome.stats.expanded);
+      expect(seen).toEqual(seen.map((_value, index) => index + 1));
+    }
+  });
+
+  it('reports A* expanding a subset of what uniform-cost search expands', () => {
+    // This is the claim the client's overlay draws: the shaded region for A* sits
+    // inside the region for uniform-cost search, it is not merely smaller.
+    const { grid, start, goal } = randomCostGrid(31, 14, 14);
+    const problem = gridProblem(grid, start, goal);
+    const key = (cell: Cell): string => `${String(cell.x)},${String(cell.y)}`;
+
+    const broad = new Set<string>();
+    uniformCostSearch(problem, { onExpand: (cell) => broad.add(key(cell)) });
+
+    const narrow = new Set<string>();
+    aStarSearch(problem, (cell) => manhattan(cell, goal), {
+      onExpand: (cell) => narrow.add(key(cell)),
+    });
+
+    expect(narrow.size).toBeLessThanOrEqual(broad.size);
+    for (const cell of narrow) expect(broad.has(cell)).toBe(true);
+  });
+
+  it('is optional and changes nothing when omitted', () => {
+    const { grid, start, goal } = randomCostGrid(44, 10, 10);
+    const problem = gridProblem(grid, start, goal);
+    const withCallback = uniformCostSearch(problem, { onExpand: () => undefined });
+    const without = uniformCostSearch(problem);
+    expect(withCallback.stats).toEqual(without.stats);
+    if (withCallback.found && without.found) expect(withCallback.path).toEqual(without.path);
+  });
+});

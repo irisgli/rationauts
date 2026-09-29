@@ -52,7 +52,7 @@ function succeed<S, A>(node: SearchNode<S, A>, counters: Counters): SearchOutcom
  */
 export function breadthFirstSearch<S, A>(
   problem: SearchProblem<S, A>,
-  options: SearchOptions = {},
+  options: SearchOptions<S> = {},
 ): SearchOutcome<S, A> {
   const limit = options.maxExpansions ?? DEFAULT_MAX_EXPANSIONS;
   const counters: Counters = { expanded: 0, generated: 0, maxFrontier: 1 };
@@ -68,6 +68,7 @@ export function breadthFirstSearch<S, A>(
     if (problem.isGoal(node.state)) return succeed(node, counters);
 
     counters.expanded++;
+    options.onExpand?.(node.state, counters.expanded);
     if (counters.expanded > limit) {
       return { found: false, reason: 'limit-reached', stats: snapshot(counters) };
     }
@@ -95,7 +96,7 @@ export function breadthFirstSearch<S, A>(
  */
 export function depthFirstSearch<S, A>(
   problem: SearchProblem<S, A>,
-  options: SearchOptions = {},
+  options: SearchOptions<S> = {},
 ): SearchOutcome<S, A> {
   const limit = options.maxExpansions ?? DEFAULT_MAX_EXPANSIONS;
   const counters: Counters = { expanded: 0, generated: 0, maxFrontier: 1 };
@@ -114,6 +115,7 @@ export function depthFirstSearch<S, A>(
     if (problem.isGoal(node.state)) return succeed(node, counters);
 
     counters.expanded++;
+    options.onExpand?.(node.state, counters.expanded);
     if (counters.expanded > limit) {
       return { found: false, reason: 'limit-reached', stats: snapshot(counters) };
     }
@@ -149,7 +151,7 @@ export function depthFirstSearch<S, A>(
 function bestFirstSearch<S, A>(
   problem: SearchProblem<S, A>,
   evaluate: (node: SearchNode<S, A>) => number,
-  options: SearchOptions = {},
+  options: SearchOptions<S> = {},
 ): SearchOutcome<S, A> {
   const limit = options.maxExpansions ?? DEFAULT_MAX_EXPANSIONS;
   const counters: Counters = { expanded: 0, generated: 0, maxFrontier: 1 };
@@ -172,6 +174,7 @@ function bestFirstSearch<S, A>(
     if (problem.isGoal(node.state)) return succeed(node, counters);
 
     counters.expanded++;
+    options.onExpand?.(node.state, counters.expanded);
     if (counters.expanded > limit) {
       return { found: false, reason: 'limit-reached', stats: snapshot(counters) };
     }
@@ -194,7 +197,7 @@ function bestFirstSearch<S, A>(
 /** Uniform-cost search. Optimal for any non-negative step costs. */
 export function uniformCostSearch<S, A>(
   problem: SearchProblem<S, A>,
-  options: SearchOptions = {},
+  options: SearchOptions<S> = {},
 ): SearchOutcome<S, A> {
   return bestFirstSearch(problem, (node) => node.cost, options);
 }
@@ -211,7 +214,7 @@ export function uniformCostSearch<S, A>(
 export function aStarSearch<S, A>(
   problem: SearchProblem<S, A>,
   heuristic: Heuristic<S>,
-  options: SearchOptions = {},
+  options: SearchOptions<S> = {},
 ): SearchOutcome<S, A> {
   return bestFirstSearch(problem, (node) => node.cost + heuristic(node.state), options);
 }
@@ -226,7 +229,7 @@ export function aStarSearch<S, A>(
 export function greedyBestFirstSearch<S, A>(
   problem: SearchProblem<S, A>,
   heuristic: Heuristic<S>,
-  options: SearchOptions = {},
+  options: SearchOptions<S> = {},
 ): SearchOutcome<S, A> {
   return bestFirstSearch(problem, (node) => heuristic(node.state), options);
 }
