@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { PLANNERS, PLANNER_IDS, type PlannerId } from './navigators.js';
-import { createRun, replay, runScenario } from './runner.js';
+import { createRun, replayIntents, runScenario } from './runner.js';
 import { buildWorld, SCENARIOS, scenarioById } from './scenarios.js';
 
 const OPTIMAL_PLANNERS = PLANNER_IDS.filter(
@@ -154,7 +154,7 @@ describe('determinism', () => {
     // are the only input, and the engine is supposed to be a pure function of them.
     for (const scenario of SCENARIOS) {
       const report = runScenario(scenario, 'astar');
-      expect(replay(scenario, report.intents), scenario.id).toEqual(report.finalState);
+      expect(replayIntents(scenario, report.intents), scenario.id).toEqual(report.finalState);
     }
   });
 });

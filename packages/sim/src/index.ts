@@ -13,6 +13,7 @@ export * from './controller.js';
 export * from './maze.js';
 export * from './navigators.js';
 export * from './problems.js';
+export * from './replay.js';
 export * from './runner.js';
 export * from './scenarios.js';
 export * from './telemetry.js';
