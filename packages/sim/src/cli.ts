@@ -1,4 +1,4 @@
-#!/usr/bin/env -S node --experimental-strip-types
+#!/usr/bin/env node
 import { readFileSync } from 'node:fs';
 import { PLANNER_IDS, isPlannerId, type PlannerId } from './navigators.js';
 import { encodeReplay, parseReplay, playReplay, REPLAY_VERSION } from './replay.js';

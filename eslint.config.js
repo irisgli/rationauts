@@ -109,8 +109,19 @@ export default tseslint.config(
     languageOptions: { globals: globals.browser },
   },
   {
-    files: ['packages/sim/src/cli.ts'],
+    // Command line tools and build scripts exist to print things.
+    files: ['packages/sim/src/cli.ts', 'packages/*/scripts/**/*.ts', 'scripts/**/*.mjs'],
     rules: { 'no-console': 'off' },
+  },
+  {
+    // Spread first: `disableTypeChecked` carries its own `languageOptions`, so it
+    // would otherwise replace the globals rather than merge with them.
+    ...tseslint.configs.disableTypeChecked,
+    files: ['scripts/**/*.mjs'],
+    languageOptions: {
+      ...tseslint.configs.disableTypeChecked.languageOptions,
+      globals: globals.node,
+    },
   },
   {
     files: ['**/*.test.ts', '**/*.test.tsx'],

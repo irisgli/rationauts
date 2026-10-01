@@ -5,6 +5,13 @@
   "license": "MIT",
   "type": "module",
   "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "prepack": "pnpm build"
+  },
   "exports": {
     ".": "./src/index.ts"
   },

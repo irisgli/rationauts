@@ -47,6 +47,15 @@ jobs:
       - name: Test
         run: pnpm test:coverage
 
+      - name: Build
+        run: pnpm build
+
+      # The libraries publish from `dist`, which nothing imports during development.
+      # This packs them and loads the tarballs from a consumer-shaped node_modules,
+      # so a broken emit fails here rather than on someone else's install.
+      - name: Verify published layout
+        run: node scripts/verify-dist.mjs
+
       - name: Upload coverage
         if: matrix.node == '22'
         uses: actions/upload-artifact@v7
