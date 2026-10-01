@@ -55,6 +55,30 @@ describe('parseMap', () => {
   it('rejects an empty map', () => {
     expect(() => parseMap('   \n\n')).toThrow(SyntaxError);
   });
+
+  it('rejects a ragged map rather than padding it', () => {
+    // The case this guards against: a wall with one character missing used to
+    // parse as a wall with a hole in it, turning an impassable scenario into a
+    // passable one without any error.
+    expect(() => parseMap('####\n##\n####')).toThrow(/ragged/);
+  });
+
+  it('names the offending row', () => {
+    expect(() => parseMap('###\n###\n#')).toThrow(/row 2 is 1 characters wide/);
+  });
+
+  it('still accepts trailing whitespace, which is invisible in source', () => {
+    const { grid } = parseMap('##  \n##\n##   ');
+    expect(grid.width).toBe(2);
+    expect(grid.height).toBe(3);
+  });
+
+  it('preserves leading whitespace, which positions the row', () => {
+    const { grid } = parseMap(' #\n##');
+    expect(grid.width).toBe(2);
+    expect(tileAt(grid, { x: 0, y: 0 })).toBe(Terrain.Plains);
+    expect(tileAt(grid, { x: 1, y: 0 })).toBe(Terrain.Rock);
+  });
 });
 
 describe('tileAt', () => {

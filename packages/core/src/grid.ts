@@ -107,24 +107,29 @@ export interface ParsedMap {
  * @throws SyntaxError when rows have inconsistent widths or the map is empty.
  */
 export function parseMap(ascii: string): ParsedMap {
-  const rows = ascii.split('\n').filter((row) => row.trim().length > 0);
+  // Trailing whitespace is invisible in a source file, so it is stripped rather than
+  // treated as terrain. Leading whitespace is not: it positions the row.
+  const rows = ascii
+    .split('\n')
+    .map((row) => row.trimEnd())
+    .filter((row) => row.length > 0);
   if (rows.length === 0) throw new SyntaxError('Map is empty');
 
   const width = Math.max(...rows.map((row) => row.length));
+  const ragged = rows.findIndex((row) => row.length !== width);
+  if (ragged !== -1) {
+    throw new SyntaxError(
+      `Map is ragged: row ${String(ragged)} is ${String(rows[ragged]?.length ?? 0)} ` +
+        `characters wide, but the widest row is ${String(width)}. ` +
+        `Pad every row to the same width.`,
+    );
+  }
+
   const tiles: Terrain[] = [];
   const markers = new Map<string, Position[]>();
 
   for (let y = 0; y < rows.length; y++) {
     const row = rows[y] ?? '';
-    if (row.trim().length !== 0 && row.length !== width) {
-      // Right-padding is allowed (trailing spaces are invisible in source files),
-      // but a genuinely ragged map is far more likely to be a typo than intent.
-      if (row.trimEnd().length > width) {
-        throw new SyntaxError(
-          `Row ${String(y)} has width ${String(row.length)}, expected at most ${String(width)}`,
-        );
-      }
-    }
     for (let x = 0; x < width; x++) {
       const symbol = row[x] ?? ' ';
       const terrain = TERRAIN_SYMBOLS[symbol];
