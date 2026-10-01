@@ -4,6 +4,13 @@
   "description": "Scenario harness, replay and benchmark CLI for Rationauts.",
   "license": "MIT",
   "type": "module",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "prepack": "pnpm build"
+  },
   "exports": {
     ".": "./src/index.ts"
   },
@@ -13,5 +20,16 @@
   "dependencies": {
     "@rationauts/agents": "workspace:*",
     "@rationauts/core": "workspace:*"
+  },
+  "publishConfig": {
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js"
+      }
+    },
+    "bin": {
+      "rationauts": "./dist/cli.js"
+    }
   }
 }

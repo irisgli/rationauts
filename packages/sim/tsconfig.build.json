@@ -1,0 +1,22 @@
+{
+  "//": "Emits the published artefact. `paths` points the workspace dependencies at",
+  "//2": "their built declarations so that declaration emit stays within rootDir; it",
+  "//3": "does not rewrite the emitted import specifiers, which stay as package names.",
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2023"],
+    "types": ["node"],
+    "noEmit": false,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "rootDir": "src",
+    "outDir": "dist",
+    "paths": {
+      "@rationauts/core": ["../core/dist/index.d.ts"],
+      "@rationauts/agents": ["../agents/dist/index.d.ts"]
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["src/**/*.test.ts", "src/__fixtures__/**"]
+}
