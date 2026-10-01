@@ -1,5 +1,7 @@
 #!/usr/bin/env -S node --experimental-strip-types
+import { readFileSync } from 'node:fs';
 import { PLANNER_IDS, isPlannerId, type PlannerId } from './navigators.js';
+import { encodeReplay, parseReplay, playReplay, REPLAY_VERSION } from './replay.js';
 import { runScenario } from './runner.js';
 import { SCENARIOS, scenarioById } from './scenarios.js';
 
@@ -21,6 +23,8 @@ Usage:
   rationauts run <scenario> [planner]   Run one scenario and print its metrics
   rationauts bench [--json]             Run every planner on every scenario
   rationauts list                       List scenarios and planners
+  rationauts record <scenario> [planner]  Write a replay to stdout
+  rationauts play <file>                Replay a recorded run and report the outcome
 
 Planners: ${PLANNER_IDS.join(', ')}
 `;
@@ -116,6 +120,47 @@ function bench(asJson: boolean): number {
   return 0;
 }
 
+function record(scenarioId: string, plannerId: PlannerId): number {
+  const scenario = scenarioById(scenarioId);
+  if (scenario === undefined) {
+    console.error(`Unknown scenario: ${scenarioId}`);
+    return 1;
+  }
+  const report = runScenario(scenario, plannerId);
+  process.stdout.write(
+    encodeReplay({
+      version: REPLAY_VERSION,
+      scenario: scenario.id,
+      planner: plannerId,
+      intents: report.intents,
+    }),
+  );
+  return 0;
+}
+
+function play(path: string): number {
+  let contents: string;
+  try {
+    contents = readFileSync(path, 'utf8');
+  } catch (cause) {
+    console.error(`Cannot read ${path}: ${cause instanceof Error ? cause.message : String(cause)}`);
+    return 1;
+  }
+
+  try {
+    const replay = parseReplay(contents);
+    const state = playReplay(replay);
+    console.log(
+      `${replay.scenario} / ${replay.planner}: replayed ${String(replay.intents.length)} ticks, ` +
+        `world now at tick ${String(state.tick)}`,
+    );
+    return 0;
+  } catch (cause) {
+    console.error(`Rejected ${path}: ${cause instanceof Error ? cause.message : String(cause)}`);
+    return 1;
+  }
+}
+
 function list(): number {
   console.log(
     table(
@@ -152,6 +197,26 @@ function main(argv: readonly string[]): number {
         return 2;
       }
       return runOne(scenarioId, plannerArg);
+    }
+    case 'record': {
+      const [scenarioId, plannerArg = 'astar'] = rest;
+      if (scenarioId === undefined) {
+        console.error(USAGE);
+        return 2;
+      }
+      if (!isPlannerId(plannerArg)) {
+        console.error(`Unknown planner: ${plannerArg}`);
+        return 2;
+      }
+      return record(scenarioId, plannerArg);
+    }
+    case 'play': {
+      const [path] = rest;
+      if (path === undefined) {
+        console.error(USAGE);
+        return 2;
+      }
+      return play(path);
     }
     case 'bench':
       return bench(rest.includes('--json'));

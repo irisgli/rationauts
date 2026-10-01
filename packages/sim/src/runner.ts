@@ -240,7 +240,10 @@ export function runScenario(
  * Used by the determinism tests: if replaying a run's own intents does not reproduce
  * its final state exactly, something is reading state it should not.
  */
-export function replay(scenario: Scenario, intents: readonly (readonly Intent[])[]): WorldState {
+export function replayIntents(
+  scenario: Scenario,
+  intents: readonly (readonly Intent[])[],
+): WorldState {
   return intents.reduce<WorldState>(
     (state, batch) => step(state, batch).state,
     buildWorld(scenario),

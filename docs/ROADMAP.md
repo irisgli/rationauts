@@ -8,6 +8,11 @@ enough.
 
 ## Shipped
 
+### Replay format
+
+- Versioned schema, validated against hostile input, bounded before it is walked
+- `rationauts record` and `rationauts play`
+
 ### Search
 
 - Reflex, breadth-first, depth-first, uniform-cost and A\* navigators
@@ -78,7 +83,6 @@ A rival colony competes for the same groves.
 
 ## Infrastructure
 
-- Replay file format with a versioned schema and validation
 - Published benchmark results tracked over time in CI
 - Unpin TypeScript once `typescript-eslint` supports 7.x
   ([ADR 6](adr/0006-pin-typescript-6-until-eslint-supports-7.md))
