@@ -127,9 +127,11 @@ export function createRun(scenario: Scenario, planner: PlannerId, options: RunOp
 
   const intents: (readonly Intent[])[] = [];
   const visited = new Set<string>();
-  // Telemetry objects are replaced wholesale on each re-plan, so identity is a
-  // reliable way to count distinct plans without the controller reporting it.
-  const countedPlans = new Set<PlanTelemetry>();
+  // Telemetry objects are replaced wholesale on each re-plan, so comparing a bot's
+  // current plan against the last one counted is enough to detect a new plan. An
+  // earlier version kept every plan ever seen in a Set to do the same job, which
+  // meant the run held on to every `explored` array it had ever produced.
+  const lastCounted = new Map<BotId, PlanTelemetry | null>();
   const plans = new Map<BotId, PlanTelemetry | null>();
 
   const record = (): void => {
@@ -173,8 +175,8 @@ export function createRun(scenario: Scenario, planner: PlannerId, options: RunOp
 
         const plan = controller.lastPlan;
         plans.set(bot.id, plan);
-        if (plan !== null && !countedPlans.has(plan)) {
-          countedPlans.add(plan);
+        if (plan !== null && lastCounted.get(bot.id) !== plan) {
+          lastCounted.set(bot.id, plan);
           planCount++;
           expanded += plan.stats.expanded;
           generated += plan.stats.generated;

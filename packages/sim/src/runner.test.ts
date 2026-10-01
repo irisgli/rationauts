@@ -213,6 +213,26 @@ describe('createRun', () => {
     expect(run.snapshot().metrics).toEqual(settled);
   });
 
+  it('counts each plan once, however many ticks it survives', () => {
+    // The plan counter is the reason the run tracks plan identity at all, so it is
+    // pinned against what an observer watching every tick would count. A plan is
+    // visible for as many ticks as the bot takes to follow it, and must still
+    // contribute to `plans` exactly once.
+    for (const scenario of SCENARIOS) {
+      const run = createRun(scenario, 'astar');
+      const distinct = new Set<unknown>();
+      let snapshot = run.snapshot();
+      while (!snapshot.finished) {
+        snapshot = run.tick();
+        for (const plan of snapshot.plans.values()) {
+          if (plan !== null) distinct.add(plan);
+        }
+      }
+      expect(snapshot.metrics.plans, scenario.id).toBe(distinct.size);
+      expect(distinct.size).toBeGreaterThan(0);
+    }
+  });
+
   it('exposes the current plan per bot for the overlay', () => {
     const scenario = scenarioById('great-plain');
     expect(scenario).toBeDefined();
